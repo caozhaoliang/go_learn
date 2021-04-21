@@ -1,6 +1,8 @@
 package sort
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // 对data进行正向排序
 // 1、从第一个元素开始，该元素可以认为已经被排序；
@@ -38,4 +40,61 @@ func BubbleSort(data []int) {
 			break
 		}
 	}
+}
+
+func quickSort(arr []int,first,last int) int {
+	left := first
+	right := last
+	pivot := arr[first]
+	for left != right {
+		for first < last && pivot < arr[right] {
+			right--
+		}
+		for first<last && pivot >= arr[left] {
+			left++
+		}
+		if left <right {
+			arr[left],arr[right] = arr[right],arr[left]
+		}
+	}
+	arr[first],arr[left] = arr[left],arr[first]
+	return left
+}
+// 归并排序
+func mergeSort(nums []int) []int {
+	if len(nums) <= 1 {
+		return nums
+	}
+	p := len(nums) / 2
+	left := mergeSort(nums[:p])
+	right := mergeSort(nums[p:])
+	return merge(left,right)
+}
+func merge(left,right []int) []int {
+	i,j := 0,0
+	m,n := len(left),len(right)
+	result := make([]int,0,n+m)
+	for {
+		if i>= m || j>= n {
+			break
+		}
+		if left[i] <= right[j] {
+			result = append(result,left[i])
+			i++
+		}else{
+			result = append(result,right[j])
+			j++
+		}
+	}
+	if i != m {
+		for ;i<m;i++ {
+			result = append(result,left[i])
+		}
+	}
+	if j != n {
+		for ; j<n;j++ {
+			result = append(result,right[j])
+		}
+	}
+	return result
 }
